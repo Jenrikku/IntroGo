@@ -1,7 +1,7 @@
 # IntroGo
 IntroGo allows the user to create custom messages and also teleports by adding new commands to the game.
-- [Server Owners]()
-- [Developers]()
+- [Server Owners](https://github.com/Jenrikku/IntroGo/blob/master/README.md#server-owners)
+- [Developers](https://github.com/Jenrikku/IntroGo/blob/master/README.md#developers)
 ## Server owners
 ### Install
 Firts, you need to install this plugin:
