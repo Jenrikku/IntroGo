@@ -10,4 +10,4 @@ Firts, you need to install this plugin:
 3. Put it into your plugins folder.
 ### How to use
 ## Developers
-If this plugin is outdated or you want to use it to do another project, please go to the Source Code section.
+If this plugin is outdated or you want to use it to do another project, please go to the [Source Code](https://github.com/Jenrikku/IntroGo) section.
