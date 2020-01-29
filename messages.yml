@@ -1,0 +1,20 @@
+Messages:
+    # Don't use '/' !
+    commands:
+     - 'example'
+     - 'command'
+    
+    # That aren't the messages, they're only names.
+    messages:
+     - 'Yellow'
+     - 'Anything'
+     
+    # Those are the messages to display. Please, add first the names.
+    # You can add colors ( using '&' )
+    text:
+        Yellow:
+         - '&eYellow!'
+        Anything:
+         - 'Anything'
+         - '&7And some messages more...'
+     
