@@ -54,24 +54,30 @@ public class Go extends JavaPlugin {
 		Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_AQUA+"  |  |  _   "+ChatColor.DARK_GRAY+"Thanks for using my plugin.");
 		Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_AQUA+"  |  |___|  ");
 		Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_AQUA+"            ");
+		if(!getDataFolder().exists()) {
+			getDataFolder().mkdir();
+		}
 		//config.yml
 		Bukkit.getConsoleSender().sendMessage(nameLite+"Adding 'config.yml'...");
 		File config = new File(this.getDataFolder(), "config.yml");
 		pathConfig = config.getPath();
 		if(!config.exists()) {
-			this.getConfig().options().copyDefaults(true);
-			saveConfig();
+			Bukkit.getConsoleSender().sendMessage(nameLite+"Creating 'config.yml'...");
+			copy(getClass().getResourceAsStream("/config.yml"), getDataFolder()+"/config.yml");
 		}
 		//messages.yml
 		Bukkit.getConsoleSender().sendMessage(nameLite+"Adding 'messages.yml'...");
 		messagesFile = new File(this.getDataFolder(), "messages.yml");
 		if(!messagesFile.exists()) {
-			copy(getClass().getResourceAsStream("/messages.yml"), getDataFolder()+"messages.yml");
+			Bukkit.getConsoleSender().sendMessage(nameLite+"Creating 'messages.yml'...");
+			copy(getClass().getResourceAsStream("/messages.yml"), getDataFolder()+"/messages.yml");
 		}
 		//commands
 		this.getCommand("m").setExecutor(new Commands(this));
 		this.getCommand("ig-admin").setExecutor(new Commands(this));
-		this.getCommand("ig-admin").setPermissionMessage(name+ChatColor.RED+"Sorry, you can't do that.");
+		//permission messages
+		String perm = getConfig().getString("Permission-message");
+		this.getCommand("ig-admin").setPermissionMessage(name+ChatColor.translateAlternateColorCodes('&', perm));
 	}
 	
 	public FileConfiguration getMessages() {

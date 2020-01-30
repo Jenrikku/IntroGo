@@ -13,7 +13,7 @@ commands:
         permission-message: Uh?
     m:
         description: Read messages.
-    tp:
+    tpt:
         description: Use teleports.
         
 permissions:
