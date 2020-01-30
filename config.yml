@@ -1,2 +1,5 @@
+# Sends a warning message when a player uses an admin command.
+Warnings: true
+
 # Just don't touch that.
 Version: 1

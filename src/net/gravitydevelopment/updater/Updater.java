@@ -1,3 +1,5 @@
+//From: https://bukkit.org/threads/updater-2-3-easy-safe-and-policy-compliant-auto-updating-for-your-plugins-new.96681/
+
 package net.gravitydevelopment.updater;
 
 import java.io.*;

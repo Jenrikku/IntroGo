@@ -23,6 +23,7 @@ public class Commands implements CommandExecutor {
 	}
 	
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+		FileConfiguration config = plugin.getConfig();
 		FileConfiguration messages = plugin.getMessages();
 		List<String> mCommands = messages.getStringList("Messages.commands");
 		List<String> mMessages = messages.getStringList("Messages.messages");
@@ -30,7 +31,7 @@ public class Commands implements CommandExecutor {
 		case "m":
 			if(args.length > 0 && args.length < 2 && mCommands.contains(args[0])) {
 				String mName = mMessages.get(mCommands.indexOf(args[0]));
-				List<String> mtoSend = messages.getStringList("Messages.text"+mName);
+				List<String> mtoSend = messages.getStringList("Messages.text."+mName);
 				for(int i=0;i<mtoSend.size();i++) {
 					if(sender instanceof Player) {
 						sender.sendMessage(ChatColor.translateAlternateColorCodes('&', mtoSend.get(i)));
@@ -62,14 +63,19 @@ public class Commands implements CommandExecutor {
 					}
 				break;
 				case "list":
-					for(int i=0;i<mCommands.size();i++) {
-						if(sender instanceof Player) {
+					if(sender instanceof Player) {
+						for(int i=0;i<mCommands.size();i++) {
 							sender.sendMessage(plugin.name+ChatColor.YELLOW+"/m "+mCommands.get(i)+" -> "+mMessages.get(i));
-							Bukkit.getConsoleSender().sendMessage(plugin.name+ChatColor.GOLD+"The player "+ChatColor.BOLD+sender+ChatColor.RESET+ChatColor.GOLD+" saw the commands list.");
-						} else {
+						}
+						if(config.getBoolean("Warnings")) {
+							Bukkit.getConsoleSender().sendMessage(plugin.name+ChatColor.GOLD+"The player "+ChatColor.BOLD+sender.getName()+ChatColor.RESET+ChatColor.GOLD+" saw the commands list.");
+						}
+					} else {
+						for(int i=0;i<mCommands.size();i++) {
 							Bukkit.getConsoleSender().sendMessage(plugin.name+ChatColor.YELLOW+"/m "+mCommands.get(i)+" -> "+mMessages.get(i));
 						}
 					}
+					
 				break;
 				case "update":
 					Updater updater = new Updater(plugin.thisPlugin, 359922, plugin.mainFile, UpdateType.NO_DOWNLOAD, false);
@@ -87,6 +93,9 @@ public class Commands implements CommandExecutor {
 						default:
 							sender.sendMessage(ChatColor.RED+"There seems to be a problem with the updating system... "+ChatColor.WHITE+result);
 						break;
+						}
+						if(config.getBoolean("Warnings")) {
+							Bukkit.getConsoleSender().sendMessage(plugin.name+ChatColor.GOLD+"The player "+ChatColor.BOLD+sender.getName()+ChatColor.RESET+ChatColor.GOLD+" has checked for updates available.");
 						}
 					} else {
 						Bukkit.getConsoleSender().sendMessage(plugin.name+ChatColor.DARK_GREEN+"v. "+ChatColor.GREEN+plugin.version+ChatColor.GOLD+" ~ "+ChatColor.AQUA+"JkKU");
@@ -112,13 +121,18 @@ public class Commands implements CommandExecutor {
 						switch(resultNow) {
 						case SUCCESS:
 							sender.sendMessage(ChatColor.DARK_GREEN+"The plugin has been updated, reload the server to take effect.");
-							Bukkit.getConsoleSender().sendMessage(plugin.name+ChatColor.GOLD+"The player "+ChatColor.BOLD+sender+ChatColor.RESET+ChatColor.GOLD+" has updated the plugin.");
+							if(config.getBoolean("Warnings")) {
+								Bukkit.getConsoleSender().sendMessage(plugin.name+ChatColor.GOLD+"The player "+ChatColor.BOLD+sender.getName()+ChatColor.RESET+ChatColor.GOLD+" has updated the plugin.");
+							}
 						break;
 						case NO_UPDATE:
 							sender.sendMessage(ChatColor.DARK_GREEN+"You're using the latest version.");
 						break;
 						default:
 							sender.sendMessage(ChatColor.RED+"There seems to be a problem with the updating system... "+ChatColor.WHITE+resultNow);
+							if(config.getBoolean("Warnings")) {
+								Bukkit.getConsoleSender().sendMessage(plugin.name+ChatColor.GOLD+"The player "+ChatColor.BOLD+sender.getName()+ChatColor.RESET+ChatColor.GOLD+" tried to update the server but he/she gets a bad result.");
+							}
 						break;
 						}
 					} else {

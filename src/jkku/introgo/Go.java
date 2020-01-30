@@ -2,9 +2,13 @@ package jkku.introgo;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -34,6 +38,7 @@ public class Go extends JavaPlugin {
 	public void onEnable() {
 		thisPlugin = this;
 		mainFile = this.getFile();
+		//check updates
 		Updater updater = new Updater(this, 359922, mainFile, UpdateType.DEFAULT, false);
 		UpdateResult result = updater.getResult();
 		switch (result) {
@@ -43,6 +48,7 @@ public class Go extends JavaPlugin {
 			case UPDATE_AVAILABLE: Bukkit.getConsoleSender().sendMessage(nameLite+ChatColor.RED+"What? The developer used an incorrect type."+ChatColor.WHITE+" ("+result+")"); break;
 			default: Bukkit.getConsoleSender().sendMessage(nameLite+ChatColor.RED+"There seems to be a problem with the updating system... "+ChatColor.WHITE+result); break;
 		}
+		//display plugin name
 		Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_AQUA+"      ___   ");
 		Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_AQUA+"  |  |      "+name+ChatColor.DARK_GREEN+"v. "+ChatColor.GREEN+version+ChatColor.GOLD+" ~ "+ChatColor.AQUA+"JkKU");
 		Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_AQUA+"  |  |  _   "+ChatColor.DARK_GRAY+"Thanks for using my plugin.");
@@ -60,20 +66,9 @@ public class Go extends JavaPlugin {
 		Bukkit.getConsoleSender().sendMessage(nameLite+"Adding 'messages.yml'...");
 		messagesFile = new File(this.getDataFolder(), "messages.yml");
 		if(!messagesFile.exists()) {
-			this.getMessages().options().copyDefaults(true);
-			try {
-				messages.save(messagesFile);
-			} catch(IOException e) {
-				e.printStackTrace();
-			}
+			copy(getClass().getResourceAsStream("/messages.yml"), getDataFolder()+"messages.yml");
 		}
-		
-		//FileConfiguration messages = getMessages();
-		//List<String> mCommands = messages.getStringList("Messages.commands");
-		//for(int i=0;i<mCommands.size();i++){
-		//	String command = mCommands.get(i);
-		//	this.getCommand(command).setExecutor(new Messages(this));
-		//}
+		//commands
 		this.getCommand("m").setExecutor(new Commands(this));
 		this.getCommand("ig-admin").setExecutor(new Commands(this));
 		this.getCommand("ig-admin").setPermissionMessage(name+ChatColor.RED+"Sorry, you can't do that.");
@@ -102,4 +97,14 @@ public class Go extends JavaPlugin {
 			e.printStackTrace();
 		}
 	}
+	
+	//From: https://stackoverflow.com/questions/10308221/how-to-copy-file-inside-jar-to-outside-the-jar/44077426#44077426
+	public static boolean copy(InputStream source , String destination) {
+		try {
+			Files.copy(source, Paths.get(destination), StandardCopyOption.REPLACE_EXISTING);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+        return true;
+    }
 }
