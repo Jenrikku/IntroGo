@@ -1,3 +1,4 @@
+- IMPORTANT: This plugin is unfinished and you can't use it, but it will soon be finished.
 # IntroGo [MC Plugin]
 IntroGo allows the user to create custom messages and also teleports by adding new commands to the game.
 - [Server Owners](https://github.com/Jenrikku/IntroGo/blob/master/README.md#server-owners)
