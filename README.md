@@ -17,6 +17,6 @@ Firts, you need to install this plugin:
 4. Enter a name ID for your message in the messages section.
 5. Write it in the same entry number as the command (Example: if a command was in position 1 of the commands list, the message that was in position 1 is executed). <-- Change that to only command -> text
 6. Add a new list in text section like in the example and write wathever you want. (You can use colors with & simbol)
-7. Run the server and write '/m <your command>'
+7. Run the server and write '/m %your-command%'
 ## Developers
 If this plugin is outdated or you want to use it to do another project, please go to the [Source Code](https://github.com/Jenrikku/IntroGo) section.
