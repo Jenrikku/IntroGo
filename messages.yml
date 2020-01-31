@@ -1,20 +1,14 @@
 Messages:
-    # Don't use '/' !
-    commands:
+    # The name of the messages. They will be sended by using /m <name>.
+    names:
      - 'example'
      - 'command'
-    
-    # That aren't the messages, they're only names.
-    messages:
-     - 'Yellow'
-     - 'Anything'
      
-    # Those are the messages to display. Please, add first the names.
-    # You can add colors ( using '&' )
-    text:
-        Yellow:
+    # These are the messages to display. You can add colors ( using '&' )
+    messages:
+        example:
          - '&eYellow!'
-        Anything:
+        command:
          - 'Anything'
          - '&7And more anything...'
      

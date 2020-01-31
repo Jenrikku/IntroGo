@@ -1,12 +1,13 @@
 package jkku.introgo.resource;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
@@ -15,7 +16,7 @@ import net.gravitydevelopment.updater.Updater;
 import net.gravitydevelopment.updater.Updater.UpdateResult;
 import net.gravitydevelopment.updater.Updater.UpdateType;
 
-public class Commands implements CommandExecutor {
+public class Commands implements TabExecutor {
 	private Go plugin;
 	
 	public Commands(Go plugin){
@@ -25,13 +26,11 @@ public class Commands implements CommandExecutor {
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		FileConfiguration config = plugin.getConfig();
 		FileConfiguration messages = plugin.getMessages();
-		List<String> mCommands = messages.getStringList("Messages.commands");
-		List<String> mMessages = messages.getStringList("Messages.messages");
+		List<String> mNames = messages.getStringList("Messages.names");
 		switch(command.getName()) {
 		case "m":
-			if(args.length > 0 && args.length < 2 && mCommands.contains(args[0])) {
-				String mName = mMessages.get(mCommands.indexOf(args[0]));
-				List<String> mtoSend = messages.getStringList("Messages.text."+mName);
+			if(args.length > 0 && args.length < 2 && mNames.contains(args[0]) && messages.contains("Messages.text."+args[0])) {
+				List<String> mtoSend = messages.getStringList("Messages.text."+args[0]);
 				for(int i=0;i<mtoSend.size();i++) {
 					if(sender instanceof Player) {
 						sender.sendMessage(ChatColor.translateAlternateColorCodes('&', mtoSend.get(i)));
@@ -42,8 +41,12 @@ public class Commands implements CommandExecutor {
 			} else {
 				if(sender instanceof Player) {
 					sender.sendMessage("Please, use only 1 argument that exists. ( /m <something> )");
+					if(sender.hasPermission("ig.admin")) {
+						sender.sendMessage(plugin.name+"You have admin permissions, please check the 'messages.yml'.");
+					}
 				} else {
 					Bukkit.getConsoleSender().sendMessage(plugin.name+"Please, use only 1 argument that exists. ( m <something> )");
+					Bukkit.getConsoleSender().sendMessage(plugin.name+"Please check the 'messages.yml'");
 				}
 			}
 		break;
@@ -55,7 +58,9 @@ public class Commands implements CommandExecutor {
 						plugin.reloadMessages();
 						plugin.reloadConfig();
 						sender.sendMessage(plugin.name+ChatColor.GREEN+"Reloaded!");
-						Bukkit.getConsoleSender().sendMessage(plugin.name+ChatColor.YELLOW+"The player "+ChatColor.BOLD+sender+ChatColor.RESET+ChatColor.YELLOW+" has reloaded the plugin.");
+						if(config.getBoolean("Warnings")) {
+							Bukkit.getConsoleSender().sendMessage(plugin.name+ChatColor.YELLOW+"The player "+ChatColor.BOLD+sender.getName()+ChatColor.RESET+ChatColor.YELLOW+" has reloaded the plugin.");
+						}
 					} else {
 						plugin.reloadMessages();
 						plugin.reloadConfig();
@@ -64,15 +69,15 @@ public class Commands implements CommandExecutor {
 				break;
 				case "list":
 					if(sender instanceof Player) {
-						for(int i=0;i<mCommands.size();i++) {
-							sender.sendMessage(plugin.name+ChatColor.YELLOW+"/m "+mCommands.get(i)+" -> "+mMessages.get(i));
+						for(int i=0;i<mNames.size();i++) {
+							sender.sendMessage(plugin.name+ChatColor.YELLOW+"/m "+mNames.get(i));
 						}
 						if(config.getBoolean("Warnings")) {
 							Bukkit.getConsoleSender().sendMessage(plugin.name+ChatColor.GOLD+"The player "+ChatColor.BOLD+sender.getName()+ChatColor.RESET+ChatColor.GOLD+" saw the commands list.");
 						}
 					} else {
-						for(int i=0;i<mCommands.size();i++) {
-							Bukkit.getConsoleSender().sendMessage(plugin.name+ChatColor.YELLOW+"/m "+mCommands.get(i)+" -> "+mMessages.get(i));
+						for(int i=0;i<mNames.size();i++) {
+							Bukkit.getConsoleSender().sendMessage(plugin.name+ChatColor.YELLOW+"/m "+mNames.get(i));
 						}
 					}
 					
@@ -168,5 +173,22 @@ public class Commands implements CommandExecutor {
 		default: break;
 		}
 		return true;
+	}
+	
+	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+		switch(command.getName()) {
+		case "m":
+			FileConfiguration messages = plugin.getMessages();
+			return messages.getStringList("Messages.names");
+		case "ig-admin":
+			List<String> AdminList = new ArrayList<>();
+			AdminList.add("reload");
+			AdminList.add("list");
+			AdminList.add("update");
+			AdminList.add("updatenow");
+			return AdminList;
+		default:
+			return null;
+		}
 	}
 }
