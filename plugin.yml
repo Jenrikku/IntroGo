@@ -1,5 +1,5 @@
 main: jkku.introgo.Go
-version: 0.1
+version: 1.0
 name: IntroGo
 author: Jenrikku (JkKU)
 description: A simply plugin that allows the user to create custom messages an also custom teleports.
