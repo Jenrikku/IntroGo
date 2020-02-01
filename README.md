@@ -7,7 +7,7 @@ IntroGo allows the user to create custom messages and also teleports by adding n
 ### Install
 First, you need to install this plugin:
 1. Create a server with [Spigot](https://www.spigotmc.org/), [Paper](https://papermc.io/) or [CraftBukkit](https://bukkit.gamepedia.com/Setting_up_a_server).
-2. Download [this file](https://dev.bukkit.org/projects/introgo/files/2872892).
+2. Download [this file](https://dev.bukkit.org/projects/introgo/files/2872892/download).
 3. Put it into your plugins folder.
 4. Launch your server at least one time to generate the configuration files.
 ### How to use
