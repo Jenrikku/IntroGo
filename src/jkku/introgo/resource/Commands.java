@@ -50,7 +50,7 @@ public class Commands implements TabExecutor {
 			}
 		break;
 		case "ig-admin": 
-			if(args.length > 0) {
+			if(args.length > 0 && args.length < 2) {
 				switch(args[0]) {
 				case "reload":
 					if(sender instanceof Player) {
