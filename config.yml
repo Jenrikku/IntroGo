@@ -1,6 +1,4 @@
-# Sends a warning message when a player uses an admin command.
-Warnings: true
-
+# A message that will be send to a player without ig.admin permissions.
 Permission-message: "&cSorry, you can't do that."
 
 # Just don't touch that.

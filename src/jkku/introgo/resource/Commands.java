@@ -24,13 +24,12 @@ public class Commands implements TabExecutor {
 	}
 	
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		FileConfiguration config = plugin.getConfig();
 		FileConfiguration messages = plugin.getMessages();
 		List<String> mNames = messages.getStringList("Messages.names");
 		switch(command.getName()) {
 		case "m":
-			if(args.length > 0 && args.length < 2 && mNames.contains(args[0]) && messages.contains("Messages.text."+args[0])) {
-				List<String> mtoSend = messages.getStringList("Messages.text."+args[0]);
+			if(args.length > 0 && args.length < 2 && mNames.contains(args[0]) && messages.contains("Messages.messages."+args[0])) {
+				List<String> mtoSend = messages.getStringList("Messages.messages."+args[0]);
 				for(int i=0;i<mtoSend.size();i++) {
 					if(sender instanceof Player) {
 						sender.sendMessage(ChatColor.translateAlternateColorCodes('&', mtoSend.get(i)));
@@ -40,13 +39,13 @@ public class Commands implements TabExecutor {
 				}
 			} else {
 				if(sender instanceof Player) {
-					sender.sendMessage("Please, use only 1 argument that exists. ( /m <something> )");
+					sender.sendMessage("Please, use only 1 argument that exists. (/m <something>)");
 					if(sender.hasPermission("ig.admin")) {
-						sender.sendMessage(plugin.name+"You have admin permissions, please check the 'messages.yml'.");
+						sender.sendMessage(plugin.name+ChatColor.YELLOW+"You have admin permissions, please check the messages.yml");
 					}
 				} else {
-					Bukkit.getConsoleSender().sendMessage(plugin.name+"Please, use only 1 argument that exists. ( m <something> )");
-					Bukkit.getConsoleSender().sendMessage(plugin.name+"Please check the 'messages.yml'");
+					Bukkit.getConsoleSender().sendMessage(plugin.name+ChatColor.YELLOW+"Please, use only 1 argument that exists. (m <something>)");
+					Bukkit.getConsoleSender().sendMessage(plugin.name+ChatColor.YELLOW+"Check the 'messages.yml'");
 				}
 			}
 		break;
@@ -58,9 +57,6 @@ public class Commands implements TabExecutor {
 						plugin.reloadMessages();
 						plugin.reloadConfig();
 						sender.sendMessage(plugin.name+ChatColor.GREEN+"Reloaded!");
-						if(config.getBoolean("Warnings")) {
-							Bukkit.getConsoleSender().sendMessage(plugin.name+ChatColor.YELLOW+"The player "+ChatColor.BOLD+sender.getName()+ChatColor.RESET+ChatColor.YELLOW+" has reloaded the plugin.");
-						}
 					} else {
 						plugin.reloadMessages();
 						plugin.reloadConfig();
@@ -71,9 +67,6 @@ public class Commands implements TabExecutor {
 					if(sender instanceof Player) {
 						for(int i=0;i<mNames.size();i++) {
 							sender.sendMessage(plugin.name+ChatColor.YELLOW+"/m "+mNames.get(i));
-						}
-						if(config.getBoolean("Warnings")) {
-							Bukkit.getConsoleSender().sendMessage(plugin.name+ChatColor.GOLD+"The player "+ChatColor.BOLD+sender.getName()+ChatColor.RESET+ChatColor.GOLD+" saw the commands list.");
 						}
 					} else {
 						for(int i=0;i<mNames.size();i++) {
@@ -99,9 +92,6 @@ public class Commands implements TabExecutor {
 							sender.sendMessage(ChatColor.RED+"There seems to be a problem with the updating system... "+ChatColor.WHITE+result);
 						break;
 						}
-						if(config.getBoolean("Warnings")) {
-							Bukkit.getConsoleSender().sendMessage(plugin.name+ChatColor.GOLD+"The player "+ChatColor.BOLD+sender.getName()+ChatColor.RESET+ChatColor.GOLD+" has checked for updates available.");
-						}
 					} else {
 						Bukkit.getConsoleSender().sendMessage(plugin.name+ChatColor.DARK_GREEN+"v. "+ChatColor.GREEN+plugin.version+ChatColor.GOLD+" ~ "+ChatColor.AQUA+"JkKU");
 						Bukkit.getConsoleSender().sendMessage("Checking for updates...");
@@ -122,22 +112,16 @@ public class Commands implements TabExecutor {
 					Updater updateNow = new Updater(plugin.thisPlugin, 359922, plugin.mainFile, UpdateType.DEFAULT, false);
 					UpdateResult resultNow = updateNow.getResult();
 					if(sender instanceof Player) {
-						sender.sendMessage(plugin.name+"Downloading...");
+						sender.sendMessage(plugin.name+ChatColor.YELLOW+"Downloading...");
 						switch(resultNow) {
 						case SUCCESS:
 							sender.sendMessage(ChatColor.DARK_GREEN+"The plugin has been updated, reload the server to take effect.");
-							if(config.getBoolean("Warnings")) {
-								Bukkit.getConsoleSender().sendMessage(plugin.name+ChatColor.GOLD+"The player "+ChatColor.BOLD+sender.getName()+ChatColor.RESET+ChatColor.GOLD+" has updated the plugin.");
-							}
 						break;
 						case NO_UPDATE:
 							sender.sendMessage(ChatColor.DARK_GREEN+"You're using the latest version.");
 						break;
 						default:
 							sender.sendMessage(ChatColor.RED+"There seems to be a problem with the updating system... "+ChatColor.WHITE+resultNow);
-							if(config.getBoolean("Warnings")) {
-								Bukkit.getConsoleSender().sendMessage(plugin.name+ChatColor.GOLD+"The player "+ChatColor.BOLD+sender.getName()+ChatColor.RESET+ChatColor.GOLD+" tried to update the server but he/she gets a bad result.");
-							}
 						break;
 						}
 					} else {
