@@ -27,13 +27,15 @@ public class Go extends JavaPlugin {
 	PluginDescriptionFile pdffile = getDescription();
 	public Plugin thisPlugin;
 	public File mainFile;
-	public String version = pdffile.getVersion();
-	public String name = ChatColor.GOLD+"["+ChatColor.GREEN+"Intro"+ChatColor.YELLOW+"Go"+ChatColor.GOLD+"] ";
-	public String nameLite = "[IntroGo] ";
+	public final String version = pdffile.getVersion();
+	public final String name = ChatColor.GOLD+"["+ChatColor.GREEN+"Intro"+ChatColor.YELLOW+"Go"+ChatColor.GOLD+"] ";
+	public final String nameLite = "[IntroGo] ";
 	
 	public String pathConfig;
 	private FileConfiguration messages = null;
 	private File messagesFile = null;
+	private FileConfiguration teleports = null;
+	private File teleportsFile = null;
 	
 	public void onEnable() {
 		thisPlugin = this;
@@ -50,7 +52,7 @@ public class Go extends JavaPlugin {
 		}
 		//display plugin name
 		Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_AQUA+"      ___   ");
-		Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_AQUA+"  |  |      "+name+ChatColor.DARK_GREEN+"v. "+ChatColor.GREEN+version+ChatColor.GOLD+" ~ "+ChatColor.AQUA+"JkKU");
+		Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_AQUA+"  |  |      "+name+ChatColor.DARK_GREEN+"v. "+ChatColor.GREEN+version+ChatColor.YELLOW+" ~ "+ChatColor.AQUA+"JkKU");
 		Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_AQUA+"  |  |  _   "+ChatColor.DARK_GRAY+"Thanks for using my plugin.");
 		Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_AQUA+"  |  |___|  ");
 		Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_AQUA+"            ");
@@ -72,12 +74,19 @@ public class Go extends JavaPlugin {
 			Bukkit.getConsoleSender().sendMessage(nameLite+"Creating 'messages.yml'...");
 			copy(getClass().getResourceAsStream("/messages.yml"), getDataFolder()+"/messages.yml");
 		}
+		//teleports.yml
+		Bukkit.getConsoleSender().sendMessage(nameLite+"Adding 'teleports.yml'...");
+		teleportsFile = new File(this.getDataFolder(), "teleports.yml");
+		if(!teleportsFile.exists()) {
+			Bukkit.getConsoleSender().sendMessage(nameLite+"Creating 'teleports.yml'...");
+			copy(getClass().getResourceAsStream("/teleports.yml"), getDataFolder()+"/teleports.yml");
+		}
 		//commands
 		this.getCommand("m").setExecutor(new Commands(this));
 		this.getCommand("ig-admin").setExecutor(new Commands(this));
 		//permission messages
 		String perm = getConfig().getString("Permission-message");
-		this.getCommand("ig-admin").setPermissionMessage(name+ChatColor.translateAlternateColorCodes('&', perm));
+		this.getCommand("ig-admin").setPermissionMessage(name+ChatColor.WHITE+ChatColor.translateAlternateColorCodes('&', perm));
 	}
 	
 	public FileConfiguration getMessages() {
@@ -98,6 +107,30 @@ public class Go extends JavaPlugin {
 			if(defConfigStream != null) {
 				YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigStream);
 				messages.setDefaults(defConfig);
+			}
+		} catch(UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public FileConfiguration getTeleports() {
+		if(teleports == null) {
+			reloadMessages();
+		}
+		return teleports;
+	}
+	
+	public void reloadTeleports() {
+		if(teleports == null) {
+			teleportsFile = new File(getDataFolder(), "teleports.yml");
+		}
+		teleports = YamlConfiguration.loadConfiguration(teleportsFile);
+		Reader defConfigStream;
+		try {
+			defConfigStream = new InputStreamReader(this.getResource("teleports.yml"), "UTF8");
+			if(defConfigStream != null) {
+				YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigStream);
+				teleports.setDefaults(defConfig);
 			}
 		} catch(UnsupportedEncodingException e) {
 			e.printStackTrace();

@@ -11,12 +11,21 @@ First, you need to install this plugin:
 3. Put it into your plugins folder.
 4. Launch your server at least one time to generate the configuration files.
 ### How to use
-- Note that you need to create the configuartion files running your server at least one time.
+- Note that you need to create the configuration files by running your server at least one time.
 1. Go to your plugins folder and open 'IntroGo' folder. Inside you can find two files: 'config.yml' and 'messages.yml'.
 2. Open 'messages.yml'. There're two sections: 'names' and 'messages'.
 3. Write an entry in the names section with the command you want the player to use to view a message.
 4. Create a list for your message in 'messages' as in the example.
 5. Write wathever you want. (You can use colors with & symbol)
 6. Run the server and write '/m %name%'.
+#### Command /ig-admin (or /ig-op /ig-adm)
+- /ig-admin reload
+	Reloads the configuration files. Useful for loading new messages without restarting the server.
+- /ig-admin list
+	Returns the messages list.
+- /ig-admin update
+	Checks for updates without downloading them.
+- /ig-admin updatenow
+	Checks for updates and downloads them.
 ## Developers
 If this plugin is outdated or you want to use it to do another project, please go to the [Source Code](https://github.com/Jenrikku/IntroGo) section.

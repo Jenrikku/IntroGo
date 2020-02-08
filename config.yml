@@ -1,5 +1,9 @@
 # A message that will be send to a player without ig.admin permissions.
 Permission-message: "&cSorry, you can't do that."
 
+# A message that will be send to a player when he/she uses a teleport.
+Teleport-message-allowed: true
+Teleport-message: "&eYou have been teleported to <name>."
+
 # Just don't touch that.
 Version: 1
