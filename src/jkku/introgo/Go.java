@@ -36,6 +36,8 @@ public class Go extends JavaPlugin {
 	private File messagesFile = null;
 	private FileConfiguration teleports = null;
 	private File teleportsFile = null;
+	private FileConfiguration login = null;
+	private File loginFile = null;
 	
 	public void onEnable() {
 		thisPlugin = this;
@@ -81,8 +83,16 @@ public class Go extends JavaPlugin {
 			Bukkit.getConsoleSender().sendMessage(nameLite+"Creating 'teleports.yml'...");
 			copy(getClass().getResourceAsStream("/teleports.yml"), getDataFolder()+"/teleports.yml");
 		}
+		//teleports.yml
+		Bukkit.getConsoleSender().sendMessage(nameLite+"Adding 'login.yml'...");
+		loginFile = new File(this.getDataFolder(), "login.yml");
+		if(!loginFile.exists()) {
+			Bukkit.getConsoleSender().sendMessage(nameLite+"Creating 'login.yml'...");
+			copy(getClass().getResourceAsStream("/login.yml"), getDataFolder()+"/login.yml");
+		}
 		//commands
 		this.getCommand("m").setExecutor(new Commands(this));
+		this.getCommand("tpt").setExecutor(new Commands(this));
 		this.getCommand("ig-admin").setExecutor(new Commands(this));
 		//permission messages
 		String perm = getConfig().getString("Permission-message");
@@ -115,7 +125,7 @@ public class Go extends JavaPlugin {
 	
 	public FileConfiguration getTeleports() {
 		if(teleports == null) {
-			reloadMessages();
+			reloadTeleports();
 		}
 		return teleports;
 	}
@@ -131,6 +141,30 @@ public class Go extends JavaPlugin {
 			if(defConfigStream != null) {
 				YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigStream);
 				teleports.setDefaults(defConfig);
+			}
+		} catch(UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public FileConfiguration getLogin() {
+		if(login == null) {
+			reloadLogin();
+		}
+		return login;
+	}
+	
+	public void reloadLogin() {
+		if(login == null) {
+			loginFile = new File(getDataFolder(), "login.yml");
+		}
+		login = YamlConfiguration.loadConfiguration(loginFile);
+		Reader defConfigStream;
+		try {
+			defConfigStream = new InputStreamReader(this.getResource("login.yml"), "UTF8");
+			if(defConfigStream != null) {
+				YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigStream);
+				login.setDefaults(defConfig);
 			}
 		} catch(UnsupportedEncodingException e) {
 			e.printStackTrace();

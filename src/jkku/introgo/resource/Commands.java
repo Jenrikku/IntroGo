@@ -66,7 +66,7 @@ public class Commands implements TabExecutor {
 						sender.sendMessage(ChatColor.translateAlternateColorCodes('&', config.getString("Teleport-message").replace("<name>", args[0])));
 					}
 				} else {
-					Bukkit.getConsoleSender().sendMessage(plugin.name+ChatColor.YELLOW+"Please, use only 1 argument that exists. (tpt <something>)");
+					Bukkit.getConsoleSender().sendMessage(plugin.name+ChatColor.RED+"You need to be a player to do that.");
 				}
 			} else {
 				if(sender instanceof Player) {
@@ -86,10 +86,14 @@ public class Commands implements TabExecutor {
 				switch(args[0]) {
 				case "reload":
 					if(sender instanceof Player) {
+						plugin.reloadLogin();
+						plugin.reloadTeleports();
 						plugin.reloadMessages();
 						plugin.reloadConfig();
 						sender.sendMessage(plugin.name+ChatColor.GREEN+"Reloaded!");
 					} else {
+						plugin.reloadLogin();
+						plugin.reloadTeleports();
 						plugin.reloadMessages();
 						plugin.reloadConfig();
 						Bukkit.getConsoleSender().sendMessage(plugin.name+ChatColor.GREEN+"Reloaded!");
@@ -106,6 +110,13 @@ public class Commands implements TabExecutor {
 						}
 					}
 					
+				break;
+				case "setspawn":
+					if(sender instanceof Player) {
+						// Sense completar.
+					} else {
+						Bukkit.getConsoleSender().sendMessage(plugin.name+ChatColor.RED+"You need to be a player to do that.");
+					}
 				break;
 				case "update":
 					Updater updater = new Updater(plugin.thisPlugin, 359922, plugin.mainFile, UpdateType.NO_DOWNLOAD, false);
@@ -212,9 +223,8 @@ public class Commands implements TabExecutor {
 							teleports.set("Teleports.teleports."+args[2]+".x", ((Player) sender).getLocation().getX());
 							teleports.set("Teleports.teleports."+args[2]+".y", ((Player) sender).getLocation().getY());
 							teleports.set("Teleports.teleports."+args[2]+".z", ((Player) sender).getLocation().getZ());
-							teleports.set("Teleports.teleports."+args[2]+".pitch", ((Player) sender).getLocation().getPitch());
 							teleports.set("Teleports.teleports."+args[2]+".yaw", ((Player) sender).getLocation().getYaw());
-							plugin.saveConfig();
+							teleports.set("Teleports.teleports."+args[2]+".pitch", ((Player) sender).getLocation().getPitch());
 							sender.sendMessage(plugin.name+ChatColor.GREEN+"You have created the '"+args[2]+"' teleport.");
 						} else {
 							Bukkit.getConsoleSender().sendMessage(plugin.name+ChatColor.RED+"You need to be a player to do that.");
@@ -256,6 +266,7 @@ public class Commands implements TabExecutor {
 						} else {
 							Bukkit.getConsoleSender().sendMessage(plugin.name+ChatColor.RED+"There isn't any teleport to restore.");
 						}
+					plugin.saveConfig();
 					}
 					if(sender instanceof Player) {
 						sender.sendMessage(plugin.name+ChatColor.YELLOW+"/ig-admin editpt <create / delete / restore> <name>");
@@ -292,6 +303,7 @@ public class Commands implements TabExecutor {
 			case 0:
 				adminList.add("reload");
 				adminList.add("list");
+				adminList.add("setspawn");
 				adminList.add("update");
 				adminList.add("editpt");
 				return adminList;
