@@ -123,6 +123,14 @@ public class Go extends JavaPlugin {
 		}
 	}
 	
+	public void saveMessages() {
+		try {
+			messages.save(messagesFile);
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public FileConfiguration getTeleports() {
 		if(teleports == null) {
 			reloadTeleports();
@@ -147,6 +155,14 @@ public class Go extends JavaPlugin {
 		}
 	}
 	
+	public void saveTeleports() {
+		try {
+			teleports.save(teleportsFile);
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public FileConfiguration getLogin() {
 		if(login == null) {
 			reloadLogin();
@@ -167,6 +183,14 @@ public class Go extends JavaPlugin {
 				login.setDefaults(defConfig);
 			}
 		} catch(UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void saveLogin() {
+		try {
+			login.save(loginFile);
+		} catch(IOException e) {
 			e.printStackTrace();
 		}
 	}

@@ -26,10 +26,11 @@ public class Commands implements TabExecutor {
 	
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		FileConfiguration messages = plugin.getMessages();
+		FileConfiguration login = plugin.getLogin();
 		FileConfiguration teleports = plugin.getMessages();
 		FileConfiguration config = plugin.getConfig();
 		List<String> mNames = messages.getStringList("Messages.names");
-		switch(command.getName()) {
+		switch(command.getName().toLowerCase()) {
 		case "m":
 			if(args.length > 0 && args.length < 2 && mNames.contains(args[0]) && messages.contains("Messages.messages."+args[0])) {
 				List<String> mtoSend = messages.getStringList("Messages.messages."+args[0]);
@@ -44,7 +45,7 @@ public class Commands implements TabExecutor {
 				if(sender instanceof Player) {
 					sender.sendMessage("Please, use only 1 argument that exists. (/m <something>)");
 					if(sender.hasPermission("ig.admin")) {
-						sender.sendMessage(plugin.name+ChatColor.YELLOW+"You have admin permissions, please check the messages.yml");
+						sender.sendMessage(plugin.name+ChatColor.YELLOW+"You have admin permissions, please check the 'messages.yml'");
 					}
 				} else {
 					Bukkit.getConsoleSender().sendMessage(plugin.name+ChatColor.YELLOW+"Please, use only 1 argument that exists. (m <something>)");
@@ -53,15 +54,15 @@ public class Commands implements TabExecutor {
 			}
 		break;
 		case "tpt":
-			if(args.length > 0 && args.length < 2 && teleports.getStringList("Teleports.names").contains(args[1])) {
+			if(args.length > 0 && args.length < 2 && teleports.getStringList("Teleports.names").contains(args[0])) {
 				if(sender instanceof Player) {
 					((Player) sender).teleport(new Location(
-							plugin.getServer().getWorld(teleports.getString("Teleports.teleports."+args[1]+".world")),
-							Double.valueOf(teleports.getString("Teleports.teleports."+args[1]+".x")),
-							Double.valueOf(teleports.getString("Teleports.teleports."+args[1]+".y")),
-							Double.valueOf(teleports.getString("Teleports.teleports."+args[1]+".z")),
-							Float.valueOf(teleports.getString("Teleports.teleports."+args[1]+".yaw")),
-							Float.valueOf(teleports.getString("Teleports.teleports."+args[1]+".pitch"))));
+							plugin.getServer().getWorld(teleports.getString("Teleports.teleports."+args[0]+".world")),
+							Double.valueOf(teleports.getString("Teleports.teleports."+args[0]+".x")),
+							Double.valueOf(teleports.getString("Teleports.teleports."+args[0]+".y")),
+							Double.valueOf(teleports.getString("Teleports.teleports."+args[0]+".z")),
+							Float.valueOf(teleports.getString("Teleports.teleports."+args[0]+".yaw")),
+							Float.valueOf(teleports.getString("Teleports.teleports."+args[0]+".pitch"))));
 					if(config.getBoolean("Teleport-message-allowed")) { 
 						sender.sendMessage(ChatColor.translateAlternateColorCodes('&', config.getString("Teleport-message").replace("<name>", args[0])));
 					}
@@ -72,7 +73,7 @@ public class Commands implements TabExecutor {
 				if(sender instanceof Player) {
 					sender.sendMessage("Please, use only 1 argument that exists. (/tpt <something>)");
 					if(sender.hasPermission("ig.admin")) {
-						sender.sendMessage(plugin.name+ChatColor.YELLOW+"You have admin permissions, please check the teleports.yml");
+						sender.sendMessage(plugin.name+ChatColor.YELLOW+"You have admin permissions, please check the 'teleports.yml'");
 					}
 				} else {
 					Bukkit.getConsoleSender().sendMessage(plugin.name+ChatColor.YELLOW+"Please, use only 1 argument that exists. (tpt <something>)");
@@ -104,16 +105,30 @@ public class Commands implements TabExecutor {
 						for(int i=0;i<mNames.size();i++) {
 							sender.sendMessage(plugin.name+ChatColor.YELLOW+"/m "+mNames.get(i));
 						}
+						for(int i=0;i<teleports.getStringList("Teleports.name").size();i++) {
+							sender.sendMessage(plugin.name+ChatColor.YELLOW+"/tpt "+teleports.getStringList("Teleports.name").get(i));
+						}
 					} else {
 						for(int i=0;i<mNames.size();i++) {
 							Bukkit.getConsoleSender().sendMessage(plugin.name+ChatColor.YELLOW+"/m "+mNames.get(i));
+						}
+						for(int i=0;i<teleports.getStringList("Teleports.name").size();i++) {
+							Bukkit.getConsoleSender().sendMessage(plugin.name+ChatColor.YELLOW+"/tpt "+teleports.getStringList("Teleports.name").get(i));
 						}
 					}
 					
 				break;
 				case "setspawn":
 					if(sender instanceof Player) {
-						// Sense completar.
+						login.set("Spawn-allowed", true);
+						login.set("Spawn.world", ((Player) sender).getLocation().getWorld().getName());
+						login.set("Spawn.x", ((Player) sender).getLocation().getX());
+						login.set("Spawn.y", ((Player) sender).getLocation().getY());
+						login.set("Spawn.z", ((Player) sender).getLocation().getZ());
+						login.set("Spawn.yaw", ((Player) sender).getLocation().getYaw());
+						login.set("Spawn.pitch", ((Player) sender).getLocation().getPitch());
+						sender.sendMessage(plugin.name+ChatColor.GREEN+"You have setted the server spawn.");
+						plugin.saveLogin();
 					} else {
 						Bukkit.getConsoleSender().sendMessage(plugin.name+ChatColor.RED+"You need to be a player to do that.");
 					}
@@ -167,14 +182,14 @@ public class Commands implements TabExecutor {
 				break;
 				}
 			case 2:
-				if(args[0] == "editpt") {
+				if(args[0].toLowerCase() == "editpt") {
 					if(sender instanceof Player) {
 						sender.sendMessage(plugin.name+ChatColor.YELLOW+"/ig-admin editpt <create / delete / restore> <name>");
 					} else {
 						Bukkit.getConsoleSender().sendMessage(plugin.name+ChatColor.YELLOW+"ig-admin editpt <create / delete / restore> <name>");
 					}
 				}
-				if(args[0] == "update" && args[1] == "now") {
+				if(args[0].toLowerCase() == "update" && args[1].toLowerCase() == "now") {
 					if(sender instanceof Player) {
 						sender.sendMessage(plugin.name+ChatColor.YELLOW+"Downloading...");
 						Updater updateNow = new Updater(plugin.thisPlugin, 359922, plugin.mainFile, UpdateType.DEFAULT, false);
@@ -206,7 +221,7 @@ public class Commands implements TabExecutor {
 						}
 					}
 				}
-				if(args[0] == "reload" || args[0] == "list") {
+				if(args[0].toLowerCase() == "reload" || args[0].toLowerCase() == "list") {
 					if(sender instanceof Player) {
 						sender.sendMessage(plugin.name+ChatColor.YELLOW+"Please, use only 1 argument.");
 					} else {
@@ -215,8 +230,8 @@ public class Commands implements TabExecutor {
 				}
 			break;
 			case 3:
-				if(args[0] == "editpt") {
-					if(args[1] == "create" && !teleports.getStringList("Teleports.names").contains(args[2])) {
+				if(args[0].toLowerCase() == "editpt") {
+					if(args[1].toLowerCase() == "create" && !teleports.getStringList("Teleports.names").contains(args[2])) {
 						if(sender instanceof Player) {
 							teleports.getStringList("Teleports.names").add(args[2]);
 							teleports.set("Teleports.teleports."+args[2]+".world", ((Player) sender).getLocation().getWorld().getName());
@@ -229,14 +244,14 @@ public class Commands implements TabExecutor {
 						} else {
 							Bukkit.getConsoleSender().sendMessage(plugin.name+ChatColor.RED+"You need to be a player to do that.");
 						}
-					} else if(args[1] == "create" && teleports.getStringList("Teleports.names").contains(args[2])) {
+					} else if(args[1].toLowerCase() == "create" && teleports.getStringList("Teleports.names").contains(args[2])) {
 						if(sender instanceof Player) {
 							sender.sendMessage(plugin.name+ChatColor.RED+"This teleport already exists. Nothing was created.");
 						} else {
 							Bukkit.getConsoleSender().sendMessage(plugin.name+ChatColor.RED+"This teleport already exists. Nothing was created.");
 						}
 					}
-					if(args[1] == "delete" && teleports.getStringList("Teleports.names").contains(args[2])) {
+					if(args[1].toLowerCase() == "delete" && teleports.getStringList("Teleports.names").contains(args[2])) {
 						teleports.getStringList("Teleports.names").set(teleports.getStringList("Teleports.names").indexOf(args[2]), null);
 						plugin.saveConfig();	
 						if(sender instanceof Player) {
@@ -246,14 +261,14 @@ public class Commands implements TabExecutor {
 							Bukkit.getConsoleSender().sendMessage(plugin.name+ChatColor.YELLOW+"You have deleted the '"+args[2]+"' teleport.");
 							Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"This only deletes the command from the game, but the teleport stills in 'teleports.yml'");
 						}
-					} else if(args[1] == "delete" && !teleports.getStringList("Teleports.names").contains(args[2])) {
+					} else if(args[1].toLowerCase() == "delete" && !teleports.getStringList("Teleports.names").contains(args[2])) {
 						if(sender instanceof Player) {
 							sender.sendMessage(plugin.name+ChatColor.RED+"This teleport doesn't exist.");
 						} else {
 							Bukkit.getConsoleSender().sendMessage(plugin.name+ChatColor.RED+"This teleport doesn't exist.");
 						}
 					}
-					if(args[1] == "restore" && teleports.getString("Teleports.teleports."+args[2]+".x") != null) {
+					if(args[1].toLowerCase() == "restore" && teleports.contains("Teleports.teleports."+args[2])) {
 						teleports.getStringList("Teleports.names").add(args[2]);
 						if(sender instanceof Player) {
 							sender.sendMessage(plugin.name+ChatColor.GREEN+"Success!");
@@ -266,12 +281,19 @@ public class Commands implements TabExecutor {
 						} else {
 							Bukkit.getConsoleSender().sendMessage(plugin.name+ChatColor.RED+"There isn't any teleport to restore.");
 						}
-					plugin.saveConfig();
+					plugin.saveTeleports();
 					}
-					if(sender instanceof Player) {
+					if(sender instanceof Player && args[1].toLowerCase() != "create" && args[1].toLowerCase() != "delete" && args[1].toLowerCase() != "restore") {
 						sender.sendMessage(plugin.name+ChatColor.YELLOW+"/ig-admin editpt <create / delete / restore> <name>");
 					} else {
 						Bukkit.getConsoleSender().sendMessage(plugin.name+ChatColor.YELLOW+"ig-admin editpt <create / delete / restore> <name>");
+					}
+				}
+				if(args[0].toLowerCase() == "reload" || args[0].toLowerCase() == "list") {
+					if(sender instanceof Player) {
+						sender.sendMessage(plugin.name+ChatColor.YELLOW+"Please, use only 1 argument.");
+					} else {
+						Bukkit.getConsoleSender().sendMessage(plugin.name+ChatColor.YELLOW+"Please, use only 1 argument.");
 					}
 				}
 			break;
