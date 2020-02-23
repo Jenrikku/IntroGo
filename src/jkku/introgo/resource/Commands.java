@@ -231,8 +231,12 @@ public class Commands implements TabExecutor {
 			break;
 			case 3:
 				if(args[0].toLowerCase() == "editpt") {
-					if(args[1].toLowerCase() == "create" && !teleports.getStringList("Teleports.names").contains(args[2])) {
+					if(args[1].toLowerCase() == "create") {
 						if(sender instanceof Player) {
+							if(teleports.getStringList("Teleports.names").contains(args[2])) {
+								sender.sendMessage(plugin.name+ChatColor.RED+"This teleport already exists. Nothing was created.");
+								return true;
+							}
 							teleports.getStringList("Teleports.names").add(args[2]);
 							teleports.set("Teleports.teleports."+args[2]+".world", ((Player) sender).getLocation().getWorld().getName());
 							teleports.set("Teleports.teleports."+args[2]+".x", ((Player) sender).getLocation().getX());
@@ -244,43 +248,41 @@ public class Commands implements TabExecutor {
 						} else {
 							Bukkit.getConsoleSender().sendMessage(plugin.name+ChatColor.RED+"You need to be a player to do that.");
 						}
-					} else if(args[1].toLowerCase() == "create" && teleports.getStringList("Teleports.names").contains(args[2])) {
-						if(sender instanceof Player) {
-							sender.sendMessage(plugin.name+ChatColor.RED+"This teleport already exists. Nothing was created.");
+					}
+					if(args[1].toLowerCase() == "delete") {
+						if(teleports.getStringList("Teleports.names").contains(args[2])) {
+							teleports.getStringList("Teleports.names").set(teleports.getStringList("Teleports.names").indexOf(args[2]), null);
+							if(sender instanceof Player) {
+								sender.sendMessage(plugin.name+ChatColor.YELLOW+"You have deleted the '"+args[2]+"' teleport.");
+								sender.sendMessage(ChatColor.RED+"This only deletes the command from the game, but the teleport stills in 'teleports.yml'");
+							} else {
+								Bukkit.getConsoleSender().sendMessage(plugin.name+ChatColor.YELLOW+"You have deleted the '"+args[2]+"' teleport.");
+								Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"This only deletes the command from the game, but the teleport stills in 'teleports.yml'");
+							}
 						} else {
-							Bukkit.getConsoleSender().sendMessage(plugin.name+ChatColor.RED+"This teleport already exists. Nothing was created.");
+							if(sender instanceof Player) {
+								sender.sendMessage(plugin.name+ChatColor.RED+"This teleport doesn't exist.");
+							} else {
+								Bukkit.getConsoleSender().sendMessage(plugin.name+ChatColor.RED+"This teleport doesn't exist.");
+							}
 						}
 					}
-					if(args[1].toLowerCase() == "delete" && teleports.getStringList("Teleports.names").contains(args[2])) {
-						teleports.getStringList("Teleports.names").set(teleports.getStringList("Teleports.names").indexOf(args[2]), null);
-						plugin.saveConfig();	
-						if(sender instanceof Player) {
-							sender.sendMessage(plugin.name+ChatColor.YELLOW+"You have deleted the '"+args[2]+"' teleport.");
-							sender.sendMessage(ChatColor.RED+"This only deletes the command from the game, but the teleport stills in 'teleports.yml'");
+					if(args[1].toLowerCase() == "restore") {
+						if(teleports.contains("Teleports.teleports."+args[2])) {
+							teleports.getStringList("Teleports.names").add(args[2]);
+							if(sender instanceof Player) {
+								sender.sendMessage(plugin.name+ChatColor.GREEN+"Success!");
+							} else {
+								Bukkit.getConsoleSender().sendMessage(plugin.name+ChatColor.GREEN+"Success!");
+							}
 						} else {
-							Bukkit.getConsoleSender().sendMessage(plugin.name+ChatColor.YELLOW+"You have deleted the '"+args[2]+"' teleport.");
-							Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"This only deletes the command from the game, but the teleport stills in 'teleports.yml'");
-						}
-					} else if(args[1].toLowerCase() == "delete" && !teleports.getStringList("Teleports.names").contains(args[2])) {
-						if(sender instanceof Player) {
-							sender.sendMessage(plugin.name+ChatColor.RED+"This teleport doesn't exist.");
-						} else {
-							Bukkit.getConsoleSender().sendMessage(plugin.name+ChatColor.RED+"This teleport doesn't exist.");
+							if(sender instanceof Player) {
+								sender.sendMessage(plugin.name+ChatColor.RED+"There isn't any teleport to restore.");
+							} else {
+								Bukkit.getConsoleSender().sendMessage(plugin.name+ChatColor.RED+"There isn't any teleport to restore.");
+							}
 						}
 					}
-					if(args[1].toLowerCase() == "restore" && teleports.contains("Teleports.teleports."+args[2])) {
-						teleports.getStringList("Teleports.names").add(args[2]);
-						if(sender instanceof Player) {
-							sender.sendMessage(plugin.name+ChatColor.GREEN+"Success!");
-						} else {
-							Bukkit.getConsoleSender().sendMessage(plugin.name+ChatColor.GREEN+"Success!");
-						}
-					} else {
-						if(sender instanceof Player) {
-							sender.sendMessage(plugin.name+ChatColor.RED+"There isn't any teleport to restore.");
-						} else {
-							Bukkit.getConsoleSender().sendMessage(plugin.name+ChatColor.RED+"There isn't any teleport to restore.");
-						}
 					plugin.saveTeleports();
 					}
 					if(sender instanceof Player && args[1].toLowerCase() != "create" && args[1].toLowerCase() != "delete" && args[1].toLowerCase() != "restore") {
@@ -321,7 +323,7 @@ public class Commands implements TabExecutor {
 			return teleports.getStringList("Teleports.names");
 		case "ig-admin":
 			List<String> adminList = new ArrayList<>();
-			switch(args.length) {
+			switch((int) args.length) {
 			case 0:
 				adminList.add("reload");
 				adminList.add("list");
