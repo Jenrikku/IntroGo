@@ -1,31 +1,26 @@
-- IMPORTANT: This plugin is unfinished, but it will soon be finished.
 # IntroGo [MC Plugin]
-IntroGo allows the user to create custom messages and also teleports by adding new commands to the game.
-- [Server Owners](https://github.com/Jenrikku/IntroGo/blob/master/README.md#server-owners)
-- [Developers](https://github.com/Jenrikku/IntroGo/blob/master/README.md#developers)
-## Server owners
-### Install
-First, you need to install this plugin:
+IntroGo is a simple plugin that allows you to create a custom welcome message and a custom spawn.
+- [Install](https://github.com/Jenrikku/IntroGo/blob/master/README.md#install)
+- [How to use](https://github.com/Jenrikku/IntroGo/blob/master/README.md#how_to_use)
+## Install
+First, you need to install the plugin:
 1. Create a server with [Spigot](https://www.spigotmc.org/), [Paper](https://papermc.io/) or [CraftBukkit](https://bukkit.gamepedia.com/Setting_up_a_server).
-2. Download [this file](https://dev.bukkit.org/projects/introgo/files/2872892/download).
-3. Put it into your plugins folder.
+2. Download [this file]().
+3. Put it into your plugins folder (%YOUR_SERVER%\plugins\).
 4. Launch your server at least one time to generate the configuration files.
-### How to use
+## How to use
 - Note that you need to create the configuration files by running your server at least one time.
-1. Go to your plugins folder and open 'IntroGo' folder. Inside you can find two files: 'config.yml' and 'messages.yml'.
-2. Open 'messages.yml'. There're two sections: 'names' and 'messages'.
-3. Write an entry in the names section with the command you want the player to use to view a message.
-4. Create a list for your message in 'messages' as in the example.
-5. Write wathever you want. (You can use colors with & symbol)
-6. Run the server and write '/m %name%'.
-#### Command /ig-admin (or /ig-op /ig-adm)
-- /ig-admin reload
-	Reloads the configuration files. Useful for loading new messages without restarting the server.
-- /ig-admin list
-	Returns the messages list.
-- /ig-admin update
-	Checks for updates without downloading them.
-- /ig-admin updatenow
-	Checks for updates and downloads them.
-## Developers
-If this plugin is outdated or you want to use it to do another project, please go to the [Source Code](https://github.com/Jenrikku/IntroGo) section.
+### Welcome message
+1. Go to your plugins folder and open 'IntroGo' folder. Inside you can find a file named 'config.yml'.
+2. Open 'config.yml'.
+3. Set initialMessage/enabled to true.
+4. Write a welcome message like in the example.
+### Custom Spawn
+1. Run your server.
+2. Join as a player.
+3. Use '/go-adm setspawn' to set the spawn point.
+### Misc.
+- /go-adm reload
+	Reloads 'config.yml'. Useful if you want to modify the welcome message without restarting the server.
+- /go-adm info
+    Returns the current version installed.

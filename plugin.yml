@@ -1,22 +1,17 @@
-main: jkku.introgo.Go
+main: jkku.mc.introgo.Go
 version: 1.0
 name: IntroGo
-author: Jenrikku (JkKU)
-description: A simply plugin that allows the user to create custom messages an also custom teleports.
-load: STARTUP
+author: JkKU (Jenrikku)
+description: Simple welcome plugin (Custom message and spawn).
 
 commands:
-    ig-admin:
+    go-adm:
         description: Admin commands for IntroGo.
-        aliases: [ig-adm, ig-op]
-        permission: ig.admin
-        permission-message: Uh?
-    m:
-        description: Read messages.
-    tpt:
-        description: Use teleports.
+        aliases: go-op
+        permission: go.admin
+        usage: "Usage: /go-[adm/op] [setspawn|info|reload]"
         
 permissions:
-    ig.admin:
+    go.admin:
         description: Allows to admin IntroGo plugin.
         default: op
