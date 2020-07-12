@@ -13,6 +13,10 @@ import org.bukkit.event.player.PlayerJoinEvent;
 
 import jkku.mc.introgo.Go;
 
+/**
+ * IntroGo / Events / Join
+ * @author Jenrikku
+ */
 public class Join implements Listener {
 	private Server server;
 	private FileConfiguration config;

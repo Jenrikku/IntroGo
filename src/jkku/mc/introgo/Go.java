@@ -6,7 +6,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import jkku.mc.introgo.commands.MainC;
+import jkku.mc.introgo.commands.MainCmd;
 import jkku.mc.introgo.events.Join;
 
 /**
@@ -27,7 +27,7 @@ public class Go extends JavaPlugin {
 		}
 		
 		//Commands
-		getCommand("go-adm").setExecutor(new MainC(this));
+		getCommand("go-adm").setExecutor(new MainCmd(this));
 		
 		//PermissionMessages
 		getCommand("go-adm").setPermissionMessage(sufix+ChatColor.RED+"You don't have permissions!");

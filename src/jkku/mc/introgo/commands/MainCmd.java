@@ -13,13 +13,17 @@ import org.bukkit.entity.Player;
 import jkku.mc.introgo.Go;
 import net.md_5.bungee.api.ChatColor;
 
-public class MainC implements TabExecutor {
+/**
+ * IntroGo / Commands / MainCmd
+ * @author Jenrikku
+ */
+public class MainCmd implements TabExecutor {
 	private Go go;
 	private FileConfiguration config;
 	private String sufix;
 	private String version;
 	
-	public MainC(Go go) {
+	public MainCmd(Go go) {
 		this.go = go;
 		config = go.getConfig();
 		sufix = go.sufix;
@@ -57,6 +61,8 @@ public class MainC implements TabExecutor {
 					config.set("initialSpawn.z", l.getZ());
 					config.set("initialSpawn.yaw", l.getYaw());
 					config.set("initialSpawn.pitch", l.getPitch());
+					
+					go.saveConfig();
 					
 					sender.sendMessage(sufix+"Initial spawn set for all players.");
 				} else {
