@@ -54,7 +54,7 @@ public class MainCmd implements TabExecutor {
 				if(sender instanceof Player) {
 					final Location l = ((Player) sender).getLocation();
 					
-					config.set("initialSpawn.enabled", true);
+					config.set("initialSpawn.enabled", "true");
 					config.set("initialSpawn.world", l.getWorld().getName());
 					config.set("initialSpawn.x", l.getX());
 					config.set("initialSpawn.y", l.getY());

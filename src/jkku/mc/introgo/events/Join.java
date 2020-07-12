@@ -39,7 +39,7 @@ public class Join implements Listener {
 					Float.valueOf(config.getString("initialSpawn.pitch"))));
 		}
 		
-		if(config.getBoolean("initialMessage.enabled")) {
+		if(config.getString("initialMessage.enabled").equals("true")) {
 			final List<String> message = config.getStringList("initialMessage.message");
 			for(byte x = 0; x != message.size(); x++) event.getPlayer().sendMessage(
 					ChatColor.translateAlternateColorCodes('&', message.get(x))
