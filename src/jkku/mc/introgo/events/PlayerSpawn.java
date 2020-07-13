@@ -2,14 +2,16 @@ package jkku.mc.introgo.events;
 
 import java.util.List;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
+import org.spigotmc.event.player.PlayerSpawnLocationEvent;
 
 import jkku.mc.introgo.Go;
 
@@ -27,17 +29,12 @@ public class PlayerSpawn implements Listener {
 	}
 	
 	@EventHandler
-	public void PlayerSpawnLocationEvent(Player player, Location spawnLocation) {
-		Bukkit.getConsoleSender().sendMessage(player.getName() + " loged in.");
-		if(Boolean.getBoolean(config.getString("initialSpawn.enabled"))) {
-			teleport2Spawn(player);
-		}
-		
+	public void atJoin(PlayerJoinEvent event) {
 		if(config.getBoolean("initialMessage.enabled")) {
 			final List<String> message = config.getStringList("initialMessage.message");
-			for(byte x = 0; x != message.size(); x++) player.sendMessage(
+			for(byte x = 0; x != message.size(); x++) event.getPlayer().sendMessage(
 					ChatColor.translateAlternateColorCodes('&', message.get(x))
-					.replace("%player%", player.getName())
+					.replace("%player%", event.getPlayer().getName())
 					.replace("%online%", String.valueOf(server.getOnlinePlayers().size()))
 					.replace("%max%", String.valueOf(server.getMaxPlayers()))
 					.replace("%available%", String.valueOf(server.getMaxPlayers() - server.getOnlinePlayers().size()))
@@ -48,19 +45,36 @@ public class PlayerSpawn implements Listener {
 	}
 	
 	@EventHandler
-	public void PlayerRespawnEvent(Player player, Location respawnLocation, boolean isBedSpawn, boolean isAnchorSpawn) {
-		if(Boolean.getBoolean(config.getString("initialSpawn.enabledWhenRespawn"))) {
-			teleport2Spawn(player);
+	public void atJoinSpawn(PlayerSpawnLocationEvent event) {
+		try {
+		if(config.getString("initialSpawn.enabled").contains("true")) {
+			event.setSpawnLocation(new Location(
+					server.getWorld((config.getString("initialSpawn.world"))),
+					config.getDouble("initialSpawn.x"),
+					config.getDouble("initialSpawn.y"),
+					config.getDouble("initialSpawn.z"),
+					Float.valueOf(config.getString("initialSpawn.yaw")),
+					Float.valueOf(config.getString("initialSpawn.pitch"))));
+		}
+		} catch(Exception e) {
+			e.printStackTrace();
 		}
 	}
 	
-	private void teleport2Spawn(Player player) {
-		player.teleport(new Location(
-				server.getWorld((config.getString("initialSpawn.world"))),
-				config.getDouble("initialSpawn.x"),
-				config.getDouble("initialSpawn.y"),
-				config.getDouble("initialSpawn.z"),
-				Float.valueOf(config.getString("initialSpawn.yaw")),
-				Float.valueOf(config.getString("initialSpawn.pitch"))));
+	@EventHandler (priority = EventPriority.HIGHEST, ignoreCancelled = true)
+	public void atDie(PlayerRespawnEvent event) {
+		try {
+		if(config.getString("initialSpawn.enabledWhenRespawn").contains("true")) {
+			event.setRespawnLocation(new Location(
+					server.getWorld((config.getString("initialSpawn.world"))),
+					config.getDouble("initialSpawn.x"),
+					config.getDouble("initialSpawn.y"),
+					config.getDouble("initialSpawn.z"),
+					Float.valueOf(config.getString("initialSpawn.yaw")),
+					Float.valueOf(config.getString("initialSpawn.pitch"))));
+		}
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 }
