@@ -1,5 +1,6 @@
 initialSpawn:
-    enabled: false
+    enabled: 'false'
+    enabledWhenRespawn: 'false'
     
 initialMessage:
     enabled: false

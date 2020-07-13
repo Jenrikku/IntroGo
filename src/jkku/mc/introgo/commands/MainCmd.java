@@ -64,7 +64,11 @@ public class MainCmd implements TabExecutor {
 					
 					go.saveConfig();
 					
-					sender.sendMessage(sufix+"Initial spawn set for all players.");
+					sender.sendMessage(new String[] {
+							sufix + "Initial spawn set for all players.",
+							"You can also define enableWhenRespawn to true in 'config.yml'"
+							+ "if you want players to go to the initial spawn when they die.",
+					});
 				} else {
 					sender.sendMessage(sufix+"Please, log in as a player.");
 				}

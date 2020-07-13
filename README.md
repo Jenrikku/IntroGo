@@ -1,11 +1,9 @@
 # IntroGo [MC Plugin]
 IntroGo is a simple plugin that allows you to create a custom welcome message and a custom spawn.
-- [Install](https://github.com/Jenrikku/IntroGo/blob/master/README.md#install)
-- [How to use](https://github.com/Jenrikku/IntroGo/blob/master/README.md#how_to_use)
 ## Install
 First, you need to install the plugin:
-1. Create a server with [Spigot](https://www.spigotmc.org/), [Paper](https://papermc.io/) or [CraftBukkit](https://bukkit.gamepedia.com/Setting_up_a_server).
-2. Download [this file](https://github.com/Jenrikku/IntroGo/releases/download/1.0/IntroGo.jar).
+1. Create a server with [Spigot](https://www.spigotmc.org/) or [Paper](https://papermc.io/). (CraftBukkit is no longer supported)
+2. Download [this file](https://github.com/Jenrikku/IntroGo/releases/download/1.1/IntroGo.jar).
 3. Put it into your plugins folder (%YOUR_SERVER%\plugins\).
 4. Launch your server at least one time to generate the configuration files.
 ## How to use
@@ -24,6 +22,7 @@ First, you need to install the plugin:
 1. Run your server.
 2. Join as a player.
 3. Use '/go-adm setspawn' to set the spawn point.
+4. OPTIONAL - If you want, you can set enableWhenRespawn to true to teleport players to the initial spawn when they die. _You need to run /go-adm reload after it._
 ### Misc.
 - /go-adm reload
 	Reloads 'config.yml'. Useful if you want to modify the welcome message without restarting the server.

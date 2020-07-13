@@ -7,7 +7,7 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import jkku.mc.introgo.commands.MainCmd;
-import jkku.mc.introgo.events.Join;
+import jkku.mc.introgo.events.PlayerSpawn;
 
 /**
  * IntroGo 
@@ -33,6 +33,6 @@ public class Go extends JavaPlugin {
 		getCommand("go-adm").setPermissionMessage(sufix+ChatColor.RED+"You don't have permissions!");
 		
 		//Events
-		getServer().getPluginManager().registerEvents(new Join(this), this);
+		getServer().getPluginManager().registerEvents(new PlayerSpawn(this), this);
 	}
 }
