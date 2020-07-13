@@ -46,7 +46,6 @@ public class PlayerSpawn implements Listener {
 	
 	@EventHandler
 	public void atJoinSpawn(PlayerSpawnLocationEvent event) {
-		try {
 		if(config.getString("initialSpawn.enabled").contains("true")) {
 			event.setSpawnLocation(new Location(
 					server.getWorld((config.getString("initialSpawn.world"))),
@@ -56,14 +55,10 @@ public class PlayerSpawn implements Listener {
 					Float.valueOf(config.getString("initialSpawn.yaw")),
 					Float.valueOf(config.getString("initialSpawn.pitch"))));
 		}
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
 	}
 	
 	@EventHandler (priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void atDie(PlayerRespawnEvent event) {
-		try {
 		if(config.getString("initialSpawn.enabledWhenRespawn").contains("true")) {
 			event.setRespawnLocation(new Location(
 					server.getWorld((config.getString("initialSpawn.world"))),
@@ -72,9 +67,6 @@ public class PlayerSpawn implements Listener {
 					config.getDouble("initialSpawn.z"),
 					Float.valueOf(config.getString("initialSpawn.yaw")),
 					Float.valueOf(config.getString("initialSpawn.pitch"))));
-		}
-		} catch(Exception e) {
-			e.printStackTrace();
 		}
 	}
 }
