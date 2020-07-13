@@ -3,7 +3,7 @@ IntroGo is a simple plugin that allows you to create a custom welcome message an
 ## Install
 First, you need to install the plugin:
 1. Create a server with [Spigot](https://www.spigotmc.org/) or [Paper](https://papermc.io/). (CraftBukkit is no longer supported)
-2. Download [this file](https://github.com/Jenrikku/IntroGo/releases/download/1.1/IntroGo.jar).
+2. Download [this file](https://github.com/Jenrikku/IntroGo/releases/download/1.1a/IntroGo.jar).
 3. Put it into your plugins folder (%YOUR_SERVER%\plugins\).
 4. Launch your server at least one time to generate the configuration files.
 ## How to use
